@@ -1,7 +1,7 @@
 {
   "name": "ferchupessoadev/spyframe",
   "description": "A simple MVC framework with router",
-  "type": "project",
+  "type": "library",
   "require": {
     "vlucas/phpdotenv": "^5.6"
   },
