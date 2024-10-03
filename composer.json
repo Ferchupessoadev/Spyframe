@@ -25,10 +25,10 @@
   ],
   "scripts": {
     "post-install-cmd": [
-      "mkdir -p app/Controllers app/Models config && echo 'DB_HOST=localhost\nDB_NAME=spyframe\nDB_USER=root\nDB_PASS=' > .env"
+      "php scripts/createDirsAndFiles.php"
     ],
     "post-update-cmd": [
-      "mkdir -p app/Controllers app/Models config && echo 'DB_HOST=localhost\nDB_NAME=spyframe\nDB_USER=root\nDB_PASS=' > .env"
+      "php scripts/createDirsAndFiles.php"
     ]
   }
 }
