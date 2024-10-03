@@ -26,11 +26,11 @@
   "scripts": {
     "post-install-cmd": [
       "echo 'Post-install script running...'",
-      "php scripts/createDirsAndFiles.php"
+      "php vendor/ferchupessoadev/spyframe/scripts/createDirsAndFiles.php"
     ],
     "post-update-cmd": [
       "echo 'Post-install script running...'",
-      "php scripts/createDirsAndFiles.php"
+      "php vendor/ferchupessoadev/spyframe/scripts/createDirsAndFiles.php"
     ]
   }
 }
