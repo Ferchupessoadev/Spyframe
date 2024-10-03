@@ -1,0 +1,33 @@
+{
+  "name": "Ferchupessoadev/spyframe",
+  "description": "A simple MVC framework with router",
+  "type": "project",
+  "require": {
+    "vlucas/phpdotenv": "^5.6",
+    "some/other-dependency": "^1.0"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Spyframe\\": "src/"
+    },
+    "files": [
+      "app/Models/Model.php",
+      "app/Controllers/Controller.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Fernando Pessoa",
+      "email": "fernandomatiaspessoa471@gmail.com"
+    }
+  ],
+  "scripts": {
+    "post-install-cmd": [
+      "mkdir -p app/Controllers app/Models config && echo 'DB_HOST=localhost\nDB_NAME=spyframe\nDB_USER=root\nDB_PASS=' > .env"
+    ],
+    "post-update-cmd": [
+      "mkdir -p app/Controllers app/Models config && echo 'DB_HOST=localhost\nDB_NAME=spyframe\nDB_USER=root\nDB_PASS=' > .env"
+    ]
+  }
+}
