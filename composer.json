@@ -6,6 +6,7 @@
     "vlucas/phpdotenv": "^5.6",
     "some/other-dependency": "^1.0"
   },
+  "minimum-stability": "main",
   "license": "MIT",
   "autoload": {
     "psr-4": {
