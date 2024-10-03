@@ -1,7 +1,7 @@
 {
   "name": "ferchupessoadev/spyframe",
   "description": "A simple MVC framework with router",
-  "type": "library",
+  "type": "project",
   "require": {
     "vlucas/phpdotenv": "^5.6"
   },
@@ -22,15 +22,5 @@
       "name": "Fernando Pessoa",
       "email": "fernandomatiaspessoa471@gmail.com"
     }
-  ],
-  "scripts": {
-    "post-install-cmd": [
-      "echo 'Post-install script running...'",
-      "php vendor/ferchupessoadev/spyframe/scripts/createDirsAndFiles.php"
-    ],
-    "post-update-cmd": [
-      "echo 'Post-install script running...'",
-      "php vendor/ferchupessoadev/spyframe/scripts/createDirsAndFiles.php"
-    ]
-  }
+  ]
 }
