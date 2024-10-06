@@ -95,8 +95,18 @@ abstract class Model
             $values = [];
 
             // Iteramos sobre el array de parámetros
-            foreach ($params as $type => $value) {
-                $types .= $type;  // Construimos la cadena de tipos
+            foreach ($params as $value) {
+                if (is_int($value)) {
+                    $types .= 'i';  // Integer
+                } elseif (is_double($value)) {
+                    $types .= 'd';  // Double
+                } elseif (is_string($value)) {
+                    $types .= 's';  // String
+                } elseif (is_null($value)) {
+                    $types .= 's';  // Null se maneja como String en este caso
+                } elseif (is_resource($value)) {
+                    $types .= 'b';  // Blob para datos binarios
+                }
                 $values[] = $value;  // Guardamos los valores en un arreglo
             }
 
