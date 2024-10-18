@@ -98,9 +98,8 @@ class Route
      * @param $response
      * @param int $statusCode
      */
-	public static function Response($response, $statusCode = 200): void
+	public static function Response($response): void
 	{
-		http_response_code($statusCode);
 		if (is_array($response) || is_object($response)) {
 			header('Content-Type: application/json');
 			echo json_encode($response);
