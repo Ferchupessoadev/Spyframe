@@ -96,15 +96,62 @@ class Route
 	/*
      * * Response
      * @param $response
-     * @param int $statusCode
      */
-	public static function Response($response): void
+	private static function Response($response): void
 	{
 		if (is_array($response) || is_object($response)) {
 			header('Content-Type: application/json');
 			echo json_encode($response);
 		} else {
 			echo $response;
+		}
+	}
+
+	private function resolve(string $uri, string $method): bool
+	{
+		foreach (self::$routes[$method] as $route => $callback) {
+			if (strpos($route, '{')) {
+				$pattern = '#^' . preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $route) . '$#';
+				if (preg_match($pattern, $uri, $matches)) {
+					array_shift($matches);
+					if (is_callable($callback)) {
+						$response = $callback(...$matches);
+					} else if (is_array($callback) || is_object($callback)) {
+						$controller = new $callback[0](self::$request);
+						$response = $controller->{$callback[1]}(...$matches);
+					}
+					self::Response($response);
+					return true;
+				}
+			}
+
+			if ($uri == $route) {
+				if (is_callable($callback)) {
+					$response = $callback();
+				} else if (is_array($callback) || is_object($callback)) {
+					$controller = new $callback[0](self::$request);
+					$response = $controller->{$callback[1]}();
+				}
+				self::Response($response);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function setBody(string $method): void
+	{
+		if ($method === 'POST') {
+			if ($input = file_get_contents('php://input')) {
+				$jsonData = json_decode($input, true);
+				if (json_last_error() === JSON_ERROR_NONE) {
+					$_POST = array_merge($_POST, $jsonData);
+				}
+			}
+			self::$request = $_POST;
+		} else {
+			self::$request = $_GET;
 		}
 	}
 
@@ -125,46 +172,19 @@ class Route
 			return;
 		}
 
-		if ($method === 'POST') {
-			if ($input = file_get_contents('php://input')) {
-				$jsonData = json_decode($input, true);
-				if (json_last_error() === JSON_ERROR_NONE) {
-					$_POST = array_merge($_POST, $jsonData);
-				}
-			}
-			self::$request = $_POST;
-		} else {
-			self::$request = $_GET;
-		}
+		// set body
+		self::setBody($method);
 
-		foreach (self::$routes[$method] as $route => $callback) {
-			if (strpos($route, '{')) {
-				$pattern = '#^' . preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $route) . '$#';
-				if (preg_match($pattern, $uri, $matches)) {
-					array_shift($matches);
-					if (is_callable($callback)) {
-						$response = $callback(...$matches);
-					} else if (is_array($callback) || is_object($callback)) {
-						$controller = new $callback[0](self::$request);
-						$response = $controller->{$callback[1]}(...$matches);
-					}
-					self::Response($response);
-					return;
-				}
-			}
+		// resolve
+		if (self::resolve($uri, $method))
+			return;
 
-			if ($uri == $route) {
-				if (is_callable($callback)) {
-					$response = $callback();
-				} else if (is_array($callback) || is_object($callback)) {
-					$controller = new $callback[0](self::$request);
-					$response = $controller->{$callback[1]}();
-				}
-				self::Response($response);
-				return;
-			}
-		}
+		// not found
+		self::notFound();
+	}
 
+	private static function notFound(): void
+	{
 		http_response_code(404);
 		if (!file_exists('../resources/views/404.php')) {
 			self::Response(['message' => '404 - Not Found']);
