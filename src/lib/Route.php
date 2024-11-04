@@ -107,7 +107,7 @@ class Route
 		}
 	}
 
-	private function resolve(string $uri, string $method): bool
+	private static function resolve(string $uri, string $method): bool
 	{
 		foreach (self::$routes[$method] as $route => $callback) {
 			if (strpos($route, '{')) {
