@@ -140,7 +140,7 @@ class Route
 		return false;
 	}
 
-	private function setBody(string $method): void
+	private static function setBody(string $method): void
 	{
 		if ($method === 'POST') {
 			if ($input = file_get_contents('php://input')) {
