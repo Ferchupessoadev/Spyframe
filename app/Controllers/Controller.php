@@ -29,7 +29,17 @@ abstract class Controller
     {
         $view = str_replace('.', '/', $view);
         foreach ($data as $key => $value) {
-            $data[$key] = htmlspecialchars($value);
+            if(!is_array($value)) {
+                $data[$key] = htmlspecialchars($value);
+            }
+
+            if (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    if(!is_array($v)) {
+                        $data[$key][$k] = htmlspecialchars($v);
+                    }
+                }
+            }
         }
 
         extract($data);
